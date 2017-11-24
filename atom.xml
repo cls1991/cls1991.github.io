@@ -1,0 +1,421 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>cls1991的个人博客</title>
+  
+  <subtitle>逼一逼自己, 看会有什么不同</subtitle>
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="http://cls1991.github.io/"/>
+  <updated>2017-11-24T04:08:12.896Z</updated>
+  <id>http://cls1991.github.io/</id>
+  
+  <author>
+    <name>cls1991</name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>获取golang.org安装包</title>
+    <link href="http://cls1991.github.io/2017/11/24/%E8%8E%B7%E5%8F%96golang-org%E5%AE%89%E8%A3%85%E5%8C%85/"/>
+    <id>http://cls1991.github.io/2017/11/24/获取golang-org安装包/</id>
+    <published>2017-11-24T03:49:48.000Z</published>
+    <updated>2017-11-24T04:08:12.896Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="目前-golang-org仍被GFW封锁-导致部分golang包无法安装"><a href="#目前-golang-org仍被GFW封锁-导致部分golang包无法安装" class="headerlink" title="目前, golang.org仍被GFW封锁, 导致部分golang包无法安装."></a>目前, <a href="https://golang.org/" target="_blank" rel="noopener">golang.org</a>仍被GFW封锁, 导致部分golang包无法安装.</h2><h3 id="1-github下载安装包"><a href="#1-github下载安装包" class="headerlink" title="1. github下载安装包"></a>1. github下载安装包</h3><pre><code>$ cd $GOPATH/src$ git clone https://github.com/golang/net golang.org/x/net</code></pre><h3 id="2-添加http代理"><a href="#2-添加http代理" class="headerlink" title="2. 添加http代理"></a>2. 添加http代理</h3><pre><code>$ sudo polipo socksParentProxy=localhost:1080 &amp;$ https_proxy=http://localhost:8123 go get golang.org/x/net</code></pre><a id="more"></a><p>推荐后者, 灵活方便.</p><p>ps: <a href="https://github.com/shadowsocks/shadowsocks/wiki/Convert-Shadowsocks-into-an-HTTP-proxy" target="_blank" rel="noopener">polipo传送门</a></p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;目前-golang-org仍被GFW封锁-导致部分golang包无法安装&quot;&gt;&lt;a href=&quot;#目前-golang-org仍被GFW封锁-导致部分golang包无法安装&quot; class=&quot;headerlink&quot; title=&quot;目前, golang.org仍被GFW封锁, 导致部分golang包无法安装.&quot;&gt;&lt;/a&gt;目前, &lt;a href=&quot;https://golang.org/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;golang.org&lt;/a&gt;仍被GFW封锁, 导致部分golang包无法安装.&lt;/h2&gt;&lt;h3 id=&quot;1-github下载安装包&quot;&gt;&lt;a href=&quot;#1-github下载安装包&quot; class=&quot;headerlink&quot; title=&quot;1. github下载安装包&quot;&gt;&lt;/a&gt;1. github下载安装包&lt;/h3&gt;&lt;pre&gt;&lt;code&gt;$ cd $GOPATH/src
+$ git clone https://github.com/golang/net golang.org/x/net
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&quot;2-添加http代理&quot;&gt;&lt;a href=&quot;#2-添加http代理&quot; class=&quot;headerlink&quot; title=&quot;2. 添加http代理&quot;&gt;&lt;/a&gt;2. 添加http代理&lt;/h3&gt;&lt;pre&gt;&lt;code&gt;$ sudo polipo socksParentProxy=localhost:1080 &amp;amp;
+$ https_proxy=http://localhost:8123 go get golang.org/x/net
+&lt;/code&gt;&lt;/pre&gt;
+    
+    </summary>
+    
+      <category term="golang" scheme="http://cls1991.github.io/categories/golang/"/>
+    
+    
+      <category term="golang.org" scheme="http://cls1991.github.io/tags/golang-org/"/>
+    
+      <category term="polipo" scheme="http://cls1991.github.io/tags/polipo/"/>
+    
+      <category term="socks5 proxy" scheme="http://cls1991.github.io/tags/socks5-proxy/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>centos源码安装mysql, redis</title>
+    <link href="http://cls1991.github.io/2016/11/08/centos-install-mysql-redis-from-source/"/>
+    <id>http://cls1991.github.io/2016/11/08/centos-install-mysql-redis-from-source/</id>
+    <published>2016-11-08T07:35:19.000Z</published>
+    <updated>2017-11-24T03:18:34.512Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="为什么选择源代码安装"><a href="#为什么选择源代码安装" class="headerlink" title="为什么选择源代码安装"></a>为什么选择源代码安装</h2><p>选择源码安装, 主要原因在于维护开发/生产环境的一致, 另外也便于使用mysql, redis的一些新特性.</p><h2 id="安装mysql"><a href="#安装mysql" class="headerlink" title="安装mysql"></a>安装mysql</h2><p>以mysql-5.5.24为例, 下载地址<a href="http://120.52.72.24/cdn.mysql.com/c3pr90ntc0td/archives/mysql-5.5/mysql-5.5.24.tar.gz" target="_blank" rel="noopener">mysql-5.5.24.tar.gz</a></p><p>安装编译所需库:</p><pre><code>yum -y install make gcc-c++ cmake bison-devel  ncurses-devel</code></pre><a id="more"></a><p>编译选项设置:</p><pre><code>cmake \-DCMAKE_INSTALL_PREFIX=/usr/local/mysql \-DMYSQL_DATADIR=/data/mysql/data \-DSYSCONFDIR=/etc \-DWITH_MYISAM_STORAGE_ENGINE=1 \-DWITH_INNOBASE_STORAGE_ENGINE=1 \-DWITH_MEMORY_STORAGE_ENGINE=1 \-DWITH_READLINE=1 \-DMYSQL_UNIX_ADDR=/var/lib/mysql/mysql.sock \-DMYSQL_TCP_PORT=3306 \-DENABLED_LOCAL_INFILE=1 \-DWITH_PARTITION_STORAGE_ENGINE=1 \-DEXTRA_CHARSETS=all \-DDEFAULT_CHARSET=utf8 \-DDEFAULT_COLLATION=utf8_general_ci</code></pre><p>一般设置这些就够用了, 如果想了解更多, 请参考<a href="http://dev.mysql.com/doc/refman/5.5/en/source-configuration-options.html" target="_blank" rel="noopener">MySQL Source-Configuration Options</a></p><p>安装:</p><pre><code>make &amp;&amp; make install</code></pre><h2 id="配置mysql"><a href="#配置mysql" class="headerlink" title="配置mysql"></a>配置mysql</h2><pre><code>// 设置权限groupadd mysqluseradd -g mysql mysqlchown -R mysql:mysql /usr/local/mysqlchown -R mysql:mysql /data/mysql/data// 初始化配置cd /usr/local/mysql./scripts/mysql_install_db --user=mysql --datadir=/data/mysql/data// 拷贝配置文件cp support-files/my-large.cnf /etc/my.cnf// mysql开机启动cp support-files/mysql.server /etc/init.d/mysqldchkconfig --level 35 mysqld on// 启动mysqlservice mysqld start// 设置密码mysqladmin -uroot password &quot;your password&quot;// 允许root账户远程访问GRANT ALL PRIVILEGES ON *.* TO &apos;root&apos;@&apos;192.169.%&apos; IDENTIFIED BY &apos;your password&apos; WITH GRANT OPTION;// 添加访客用户, 并授权CREATE USER &apos;guest&apos;@&apos;192.168.%&apos; IDENTIFIED BY &apos;your password&apos;;GRANT SELECT ON your_database.your_table TO &apos;guest&apos;@&apos;192.168.%&apos;;// 取消授权(可选)INVOKE SELECT ON your_database.your_table FROM &apos;guest&apos;@&apos;192.168.%&apos;;// 防火期(/etc/sysconfig/iptables)-A INPUT -m state --state NEW -m tcp -p -dport 3306 -j ACCEPTservice iptables restartiptables -L -n</code></pre><h2 id="安装redis"><a href="#安装redis" class="headerlink" title="安装redis"></a>安装redis</h2><p>以redis-2.8.5为例, 下载地址<a href="http://download.redis.io/releases/redis-2.8.5.tar.gz" target="_blank" rel="noopener">redis-2.8.5.tar.gz</a></p><p>编译安装:</p><pre><code>make &amp;&amp; make install</code></pre><h2 id="配置redis"><a href="#配置redis" class="headerlink" title="配置redis"></a>配置redis</h2><pre><code>// 拷贝配置文件mkdir /etc/rediscp redis.conf /etc/redis/6379.conf// 设置数据存储目录mkdir -p /data/redis/6379// 编辑配置文件, 修改以下4行daemonize yespidfile /var/run/redis_6379.pidlogfile /var/log/redis_6379.logdir /data/redis/6379// 系统配置(/etc/sysctl.conf), 添加1行vm.overcommit_memory=1sysctl vm.overcommit_memory=1sysctl -w fs.file-max=100000// redis开机启动cp utils/redis_init_script /etc/init.d/redis_6379// 编辑启动脚本(/etc/init.d/redis_6379), 添加3行(可参考/etc/init.d/mysqld)# Comments to support chkconfig on RedHat Linux# chkconfig: 2345 64 36# description:  Redis is a persistent key-value databasechkconfig --level 345 redis_6379 on// 启动redisservice redis_6379 start</code></pre><p>后期, 主机/服务器上需要运行多个redis实例, 指定不同端口就行, 很方便.</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;为什么选择源代码安装&quot;&gt;&lt;a href=&quot;#为什么选择源代码安装&quot; class=&quot;headerlink&quot; title=&quot;为什么选择源代码安装&quot;&gt;&lt;/a&gt;为什么选择源代码安装&lt;/h2&gt;&lt;p&gt;选择源码安装, 主要原因在于维护开发/生产环境的一致, 另外也便于使用mysql, redis的一些新特性.&lt;/p&gt;
+&lt;h2 id=&quot;安装mysql&quot;&gt;&lt;a href=&quot;#安装mysql&quot; class=&quot;headerlink&quot; title=&quot;安装mysql&quot;&gt;&lt;/a&gt;安装mysql&lt;/h2&gt;&lt;p&gt;以mysql-5.5.24为例, 下载地址&lt;a href=&quot;http://120.52.72.24/cdn.mysql.com/c3pr90ntc0td/archives/mysql-5.5/mysql-5.5.24.tar.gz&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;mysql-5.5.24.tar.gz&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;安装编译所需库:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;yum -y install make gcc-c++ cmake bison-devel  ncurses-devel
+&lt;/code&gt;&lt;/pre&gt;
+    
+    </summary>
+    
+      <category term="Linux" scheme="http://cls1991.github.io/categories/Linux/"/>
+    
+    
+      <category term="mysql" scheme="http://cls1991.github.io/tags/mysql/"/>
+    
+      <category term="redis" scheme="http://cls1991.github.io/tags/redis/"/>
+    
+      <category term="source" scheme="http://cls1991.github.io/tags/source/"/>
+    
+      <category term="centos" scheme="http://cls1991.github.io/tags/centos/"/>
+    
+      <category term="mysql server" scheme="http://cls1991.github.io/tags/mysql-server/"/>
+    
+      <category term="redis server" scheme="http://cls1991.github.io/tags/redis-server/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>svn/git数据仓库无损迁移</title>
+    <link href="http://cls1991.github.io/2016/07/16/svn-git%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E6%97%A0%E6%8D%9F%E8%BF%81%E7%A7%BB/"/>
+    <id>http://cls1991.github.io/2016/07/16/svn-git数据仓库无损迁移/</id>
+    <published>2016-07-16T14:15:27.000Z</published>
+    <updated>2017-11-24T03:18:34.512Z</updated>
+    
+    <content type="html"><![CDATA[<p>前几天，公司的ubuntu desktop出现不定期死机，上面托管着公司的项目代码(git管理)，美术资源(svn管理), 以及bug追踪系统(禅道管理), 排查了不是内存/cpu故障, 最终定位貌似是硬件故障. 为了一劳永逸, 干脆拿出一台古董机安装了mini版的centos server, 接下来的工作就是数据仓库迁移了. </p><p>1.svn</p><p>配置文件迁移: 直接拷贝故障机器上svn的配置文件, 确保用户/权限分配正常; 数据迁移: 考虑到需要保留提交记录, 采用原生的svnadmin进行操作.</p><pre><code>svnadmin dump oldRepository &gt; dumpfile       // 备份数据仓库svnadmin create newRepository               // 新建数据仓库svnadmin load newRepository &lt; dumpfile      // 还原数据仓库</code></pre><p>2.git</p><p>使用gitlab搭建内部git管理平台, 为了保留提交记录, 使用内置的gitlab-rake工具进行数据仓库迁移的工作.</p><a id="more"></a><p>数据仓库备份:</p><pre><code>gitlab-rake gitlab:backup:create         // 备份整个数据仓库</code></pre><p>使用以上命令会在/var/opt/gitlab/backups目录下创建一个名称类似为1393513186_gitlab_backup.tar的压缩包, 这个压缩包就是gitlab整个的完整部分, 其中开头的1596713186是备份创建的日期.</p><p>数据仓库还原:</p><pre><code># 停止gitlab相关数据连接服务gitlab-ctl stop unicorngitlab-ctl stop sidekiq# 从1596713186编号备份中恢复gitlab-rake gitlab:backup:restore BACKUP=1596713186# 启动gitlabsudo gitlab-ctl start</code></pre><p>需要注意的是新服务器上的gitlab的版本必须与创建备份时的gitlab版本号相同.</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;前几天，公司的ubuntu desktop出现不定期死机，上面托管着公司的项目代码(git管理)，美术资源(svn管理), 以及bug追踪系统(禅道管理), 排查了不是内存/cpu故障, 最终定位貌似是硬件故障. 为了一劳永逸, 干脆拿出一台古董机安装了mini版的centos server, 接下来的工作就是数据仓库迁移了. &lt;/p&gt;
+&lt;p&gt;1.svn&lt;/p&gt;
+&lt;p&gt;配置文件迁移: 直接拷贝故障机器上svn的配置文件, 确保用户/权限分配正常; 数据迁移: 考虑到需要保留提交记录, 采用原生的svnadmin进行操作.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;svnadmin dump oldRepository &amp;gt; dumpfile       // 备份数据仓库
+svnadmin create newRepository               // 新建数据仓库
+svnadmin load newRepository &amp;lt; dumpfile      // 还原数据仓库
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;2.git&lt;/p&gt;
+&lt;p&gt;使用gitlab搭建内部git管理平台, 为了保留提交记录, 使用内置的gitlab-rake工具进行数据仓库迁移的工作.&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="svn" scheme="http://cls1991.github.io/tags/svn/"/>
+    
+      <category term="git" scheme="http://cls1991.github.io/tags/git/"/>
+    
+      <category term="gitlab" scheme="http://cls1991.github.io/tags/gitlab/"/>
+    
+      <category term="commit log" scheme="http://cls1991.github.io/tags/commit-log/"/>
+    
+      <category term="无损迁移" scheme="http://cls1991.github.io/tags/%E6%97%A0%E6%8D%9F%E8%BF%81%E7%A7%BB/"/>
+    
+      <category term="提交记录" scheme="http://cls1991.github.io/tags/%E6%8F%90%E4%BA%A4%E8%AE%B0%E5%BD%95/"/>
+    
+      <category term="数据仓库" scheme="http://cls1991.github.io/tags/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>supervisor--进程的守护者</title>
+    <link href="http://cls1991.github.io/2016/04/20/supervisor-%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%AE%88%E6%8A%A4%E8%80%85/"/>
+    <id>http://cls1991.github.io/2016/04/20/supervisor-进程的守护者/</id>
+    <published>2016-04-20T05:53:34.000Z</published>
+    <updated>2017-11-24T03:18:34.512Z</updated>
+    
+    <content type="html"><![CDATA[<p>##为什么推荐supervisor<br>接触过后台开发的人, 应该对以下内容不陌生.<br>比如, 你开发了一个服务, 放在服务器上运行, 供客户端调用. 你会这样做, 以python程序为例说明:</p><pre><code>pyenv activate env_AntiCheat_2.7.9                                // 激活python虚拟环境nohup python AntiCheat.py &gt; AntiCheat.log 2&gt;&amp;1 &amp;                 // 以后台形式运行服务</code></pre><p>如果代码有更新, 需要重新部署服务, 不得不找到进程id, 杀死.</p><pre><code>ps aux | grep AntiCheat.py                     // 找出进程idkill -9 xxx                                   // 杀死进程</code></pre><p>每次都重复着这样的操作, 实在是浪费时间, 当然你也可以针对每一个程序写一份脚本, 一旦服务数量很多, 重复性的劳动就会越来越多. 这时候就需要有一个程序能够统一管理目标服务.<br><a id="more"></a></p><h2 id="安装supervisor"><a href="#安装supervisor" class="headerlink" title="安装supervisor"></a>安装supervisor</h2><pre><code>pip install supervisor</code></pre><p>手动编译安装亦可, 根据自己的需要选择一种安装途径.</p><h2 id="配置supervisor"><a href="#配置supervisor" class="headerlink" title="配置supervisor"></a>配置supervisor</h2><p>官方提供的样例配置<a href="https://github.com/Supervisor/supervisor/blob/master/supervisor/skel/sample.conf" target="_blank" rel="noopener">sample.conf</a><br>我们只需要在其基础上进行修改即可使用.</p><pre><code>; Sample supervisor config file.;; For more information on the config file, please see:; http://supervisord.org/configuration.html;; Notes:;  - Shell expansion (&quot;~&quot; or &quot;$HOME&quot;) is not supported.  Environment;    variables can be expanded using this syntax: &quot;%(ENV_HOME)s&quot;.;  - Comments must have a leading space: &quot;a=b ;comment&quot; not &quot;a=b;comment&quot;.;  - Quotes around values are not supported, except in the case of;    the environment= options as shown below.[unix_http_server]file=/tmp/supervisor.sock   ; (the path to the socket file);chmod=0700                 ; socket file mode (default 0700);chown=nobody:nogroup       ; socket file uid:gid owner;username=user              ; (default is no username (open server));password=123               ; (default is no password (open server));[inet_http_server]         ; inet (TCP) server disabled by default;port=127.0.0.1:9001        ; (ip_address:port specifier, *:port for all iface)username=cls1991              ; (default is no username (open server))password=asd123               ; (default is no password (open server))[supervisord]logfile=/tmp/supervisord.log ; (main log file;default $CWD/supervisord.log)logfile_maxbytes=50MB        ; (max main logfile bytes b4 rotation;default 50MB)logfile_backups=10           ; (num of main logfile rotation backups;default 10)loglevel=info                ; (log level;default info; others: debug,warn,trace)pidfile=/tmp/supervisord.pid ; (supervisord pidfile;default supervisord.pid)nodaemon=false               ; (start in foreground if true;default false)minfds=1024                  ; (min. avail startup file descriptors;default 1024)minprocs=200                 ; (min. avail process descriptors;default 200);umask=022                   ; (process file creation umask;default 022);user=chrism                 ; (default is current user, required if root);identifier=supervisor       ; (supervisord identifier, default is &apos;supervisor&apos;);directory=/tmp              ; (default is not to cd during start);nocleanup=true              ; (don&apos;t clean up tempfiles at start;default false);childlogdir=/tmp            ; (&apos;AUTO&apos; child log dir, default $TEMP);environment=KEY=&quot;value&quot;     ; (key value pairs to add to environment);strip_ansi=false            ; (strip ansi escape codes in logs; def. false); the below section must remain in the config file for RPC; (supervisorctl/web interface) to work, additional interfaces may be; added by defining them in separate rpcinterface: sections[rpcinterface:supervisor]supervisor.rpcinterface_factory = supervisor.rpcinterface:make_main_rpcinterface[supervisorctl]serverurl=unix:///tmp/supervisor.sock ; use a unix:// URL  for a unix socket;serverurl=http://127.0.0.1:9001 ; use an http:// url to specify an inet socket;username=chris              ; should be same as http_username if set;password=123                ; should be same as http_password if set;prompt=mysupervisor         ; cmd line prompt (default &quot;supervisor&quot;);history_file=~/.sc_history  ; use readline history if available; The below sample program section shows all possible program subsection values,; create one or more &apos;real&apos; program: sections to be able to control them under; supervisor.;[program:AntiCheat];command=python AntiCheat.py              ; the program (relative uses PATH, can take args);process_name=%(program_name)s ; process_name expr (default %(program_name)s);numprocs=1                    ; number of processes copies to start (def 1)directory=/home/taozhengkai/Developer/mygit/github/ThirdPlatform                ; directory to cwd to before exec (def no cwd);umask=022                     ; umask for process (default None);priority=999                  ; the relative start priority (default 999);autostart=true                ; start at supervisord start (default: true);startsecs=1                   ; # of secs prog must stay up to be running (def. 1);startretries=3                ; max # of serial start failures when starting (default 3);autorestart=unexpected        ; when to restart if exited after running (def: unexpected);exitcodes=0,2                 ; &apos;expected&apos; exit codes used with autorestart (default 0,2);stopsignal=QUIT               ; signal used to kill process (default TERM);stopwaitsecs=10               ; max num secs to wait b4 SIGKILL (default 10);stopasgroup=false             ; send stop signal to the UNIX process group (default false);killasgroup=false             ; SIGKILL the UNIX process group (def false);user=chrism                   ; setuid to this UNIX account to run the program;redirect_stderr=true          ; redirect proc stderr to stdout (default false);stdout_logfile=/a/path        ; stdout log path, NONE for none; default AUTO;stdout_logfile_maxbytes=1MB   ; max # logfile bytes b4 rotation (default 50MB);stdout_logfile_backups=10     ; # of stdout logfile backups (default 10);stdout_capture_maxbytes=1MB   ; number of bytes in &apos;capturemode&apos; (default 0);stdout_events_enabled=false   ; emit events on stdout writes (default false);stderr_logfile=/a/path        ; stderr log path, NONE for none; default AUTO;stderr_logfile_maxbytes=1MB   ; max # logfile bytes b4 rotation (default 50MB);stderr_logfile_backups=10     ; # of stderr logfile backups (default 10);stderr_capture_maxbytes=1MB   ; number of bytes in &apos;capturemode&apos; (default 0);stderr_events_enabled=false   ; emit events on stderr writes (default false)environment=PATH=&quot;/home/taozhengkai/.pyenv/versions/env_AntiCheat_2.7.9/bin&quot;       ; process environment additions (def no adds);serverurl=AUTO                ; override serverurl computation (childutils); The below sample eventlistener section shows all possible; eventlistener subsection values, create one or more &apos;real&apos;; eventlistener: sections to be able to handle event notifications; sent by supervisor.; The below sample group section shows all possible group values,; create one or more &apos;real&apos; group: sections to create &quot;heterogeneous&quot;; process groups.;[group:thegroupname]programs=AntiCheat  ; each refers to &apos;x&apos; in [program:x] definitions;priority=999                  ; the relative start priority (default 999); The [include] section can just contain the &quot;files&quot; setting.  This; setting can list multiple files (separated by whitespace or; newlines).  It can also contain wildcards.  The filenames are; interpreted as relative to this file.  Included files *cannot*; include files themselves.;[include];files = relative/directory/*.ini</code></pre><p>配置完毕之后, 启动supervisor服务</p><pre><code>supervisord -c supervisord.conf                     // 从指定的配置文件启动supervisor</code></pre><p>如果配置了web管理接口, 直接访问<a href="http://127.0.0.1:9001(默认配置" target="_blank" rel="noopener">http://127.0.0.1:9001(默认配置</a>), 用户名和密码默认或者自定义都行:</p><pre><code>[inet_http_server]         ; inet (TCP) server disabled by defaultport=127.0.0.1:9001        ; (ip_address:port specifier, *:port for all iface)username=cls1991              ; (default is no username (open server))password=asd123               ; (default is no password (open server))</code></pre><p>代码更新之后, 可以利用web管理页面重新部署进程, 便利不少. 想更深入了解supervisor, 请访问<a href="http://supervisord.org/" target="_blank" rel="noopener">supervisor官网</a>.</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;##为什么推荐supervisor&lt;br&gt;接触过后台开发的人, 应该对以下内容不陌生.&lt;br&gt;比如, 你开发了一个服务, 放在服务器上运行, 供客户端调用. 你会这样做, 以python程序为例说明:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;pyenv activate env_AntiCheat_2.7.9                                // 激活python虚拟环境
+nohup python AntiCheat.py &amp;gt; AntiCheat.log 2&amp;gt;&amp;amp;1 &amp;amp;                 // 以后台形式运行服务
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;如果代码有更新, 需要重新部署服务, 不得不找到进程id, 杀死.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;ps aux | grep AntiCheat.py                     // 找出进程id
+kill -9 xxx                                   // 杀死进程
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;每次都重复着这样的操作, 实在是浪费时间, 当然你也可以针对每一个程序写一份脚本, 一旦服务数量很多, 重复性的劳动就会越来越多. 这时候就需要有一个程序能够统一管理目标服务.&lt;br&gt;
+    
+    </summary>
+    
+      <category term="Linux" scheme="http://cls1991.github.io/categories/Linux/"/>
+    
+    
+      <category term="python" scheme="http://cls1991.github.io/tags/python/"/>
+    
+      <category term="supervisor" scheme="http://cls1991.github.io/tags/supervisor/"/>
+    
+      <category term="process" scheme="http://cls1991.github.io/tags/process/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Debian之oracle jdk配置篇</title>
+    <link href="http://cls1991.github.io/2016/01/20/Debian%E4%B9%8Boracle%20jdk%E9%85%8D%E7%BD%AE%E7%AF%87/"/>
+    <id>http://cls1991.github.io/2016/01/20/Debian之oracle jdk配置篇/</id>
+    <published>2016-01-20T13:57:07.000Z</published>
+    <updated>2017-11-24T03:18:34.508Z</updated>
+    
+    <content type="html"><![CDATA[<p>##jdk下载<br>debian7.9默认安装openjdk6.0, 平时也够用, 以防万一, 最好还是切换到oracle jdk上.</p><p><a href="http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html" target="_blank" rel="noopener">jdk官方下载</a>, 选择需要的版本下载.</p><p>##jdk配置</p><p>####1.解压tar.gz文件</p><pre><code>cp ~/Downloads/jdk-8u71-linux-x64.tar.gz /opt/cd /optmkdir jdk &amp;&amp; cd jdktar zxvf jdk-8u71-linux-x64.tar.gzrm jdk-8u71-linux-x64.tar.gz</code></pre><p>####2.替换openjdk<br><a id="more"></a></p><pre><code>update-alternatives --config java         // 查看所有jdk配置(主要知道openjdk的优先级)</code></pre><p><img src="https://github.com/cls1991/MyBlog/raw/master/img/all_jdks.png" alt="all_jdks">    </p><pre><code>sudo update-alternatives --install /usr/bin/java java /opt/jdk/jdk1.8.0_71/bin/java 1200      // 设置oracle jdk的优先级(只要比openjdk的数字大就行)sudo update-alternatives --install /usr/bin/javac javac /opt/jdk/jdk1.8.0_71/bin/javac 1200   // 设置javac的优先级</code></pre><p>查看当前java配置</p><pre><code>update-alternatives --display java     // 查看当前java配置</code></pre><p><img src="https://github.com/cls1991/MyBlog/raw/master/img/java.png" alt="java"></p><p>查看当前javac配置</p><pre><code>update-alternatives --display javac    // 查看当前javac配置</code></pre><p><img src="https://github.com/cls1991/MyBlog/raw/master/img/javac.png" alt="javac"></p><p>查看java以及javac版本</p><pre><code>java -versionjavac -version</code></pre><p>####3.升级oracle jdk<br>可以多个版本共存或者删除老版本, 仅保留最新版本, 同上操作, 以版本号区分jdk新旧, 设置优先级.</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;##jdk下载&lt;br&gt;debian7.9默认安装openjdk6.0, 平时也够用, 以防万一, 最好还是切换到oracle jdk上.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;jdk官方下载&lt;/a&gt;, 选择需要的版本下载.&lt;/p&gt;
+&lt;p&gt;##jdk配置&lt;/p&gt;
+&lt;p&gt;####1.解压tar.gz文件&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;cp ~/Downloads/jdk-8u71-linux-x64.tar.gz /opt/
+cd /opt
+mkdir jdk &amp;amp;&amp;amp; cd jdk
+tar zxvf jdk-8u71-linux-x64.tar.gz
+rm jdk-8u71-linux-x64.tar.gz
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;####2.替换openjdk&lt;br&gt;
+    
+    </summary>
+    
+      <category term="Linux" scheme="http://cls1991.github.io/categories/Linux/"/>
+    
+    
+      <category term="Linux" scheme="http://cls1991.github.io/tags/Linux/"/>
+    
+      <category term="Debian" scheme="http://cls1991.github.io/tags/Debian/"/>
+    
+      <category term="jdk" scheme="http://cls1991.github.io/tags/jdk/"/>
+    
+      <category term="java" scheme="http://cls1991.github.io/tags/java/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Debian安装教程</title>
+    <link href="http://cls1991.github.io/2016/01/20/How%20to%20install%20debian_2016_01_20/"/>
+    <id>http://cls1991.github.io/2016/01/20/How to install debian_2016_01_20/</id>
+    <published>2016-01-20T13:57:07.000Z</published>
+    <updated>2017-11-24T03:18:34.512Z</updated>
+    
+    <content type="html"><![CDATA[<p>##安装Debian7.9(wheezy)记录</p><p>###1. 刻录启动盘</p><ul><li><a href="http://cdimage.debian.org/mirror/cdimage/archive/7.9.0/amd64/iso-dvd/" target="_blank" rel="noopener">Debian镜像下载</a>, 直接下载DVD_1.iso即可, 32位系统去相应目录下载.</li><li>Windows平台下制作启动盘, 可供选择的软件比较多, 推荐2款自己平时常用的.<ul><li><a href="https://www.ezbsystems.com/ultraiso/download.htm" target="_blank" rel="noopener">ultraiso官网</a></li><li><a href="http://www.poweriso.com/download.php" target="_blank" rel="noopener">poweriso官网</a><br>选择对应版本安装即可, 软件具体使用方法百度/谷歌一下.</li></ul></li><li><p>Linux平台下制作启动盘, 推荐dd命令</p><pre><code>dd if=/path/to/debian.iso of=/dev/sdb bs=1M    // 替换成你的实际路径</code></pre></li></ul><a id="more"></a><p>###2. 安装Debian</p><ul><li>可以选择文本安装/图形界面安装, 推荐新手使用后者, 操作更直观.</li><li>系统语言选择, 推荐英文系统.</li><li>磁盘分区<br>  Debian内置多种分区方案, 简单介绍一下.<ul><li>使用整块磁盘, lvm支持<ul><li>优点: lvm方便之后拓展分区大小</li><li>缺点: 单系统, 想装Windows/Linux多系统的不用考虑</li></ul></li><li>手动选择磁盘<ul><li>系统自动分区有2种方案<ul><li>仅划分一个分区<ul><li>优点: 简单, 不易犯错</li><li>缺点: 安全性低, 分区挂了, 系统也完了</li></ul></li><li>划分/, /home, /usr, /var, /tmp分区以及swap空间<ul><li>优点: 安全性高, 便于备份重要数据</li><li>缺点: 早期的分区太小, 后期只能不停的转移数据, 甚至是重装系统</li></ul></li></ul></li><li>手动分区(推荐)<br>  考虑到系统自动分区, 部分分区大小可能不够用, 还是自己手动来.<ul><li>预装Debian的磁盘大小: 304G</li><li>划分方案:<ul><li>/: 15G</li><li>/usr: 40G</li><li>/var: 25G</li><li>/tmp: 5G</li><li>/home: 211G</li><li>swap: 8G(内存的2倍)</li></ul></li></ul></li></ul></li></ul></li><li>安装系统, 安装过程不要联网, 直接从启动盘安装软件; 可能会出现无线网卡固件缺失的情况, 不用管, 之后会处理; 按照默认规格安装, 经过一段时间的等待, 完成安装.</li></ul><p>###3. 问题解决</p><ul><li><p>无线网卡驱动</p><pre><code>lspci        // 找到无线网卡型号</code></pre><p>  <img src="https://github.com/cls1991/MyBlog/raw/master/img/lspci.png" alt="lspci"><br>  比如, 我机器的无线网卡就是BCM43225, 有了这个, 问题就好办了.<br>  访问<a href="https://wiki.debian.org/brcm80211" target="_blank" rel="noopener">Debian Wiki</a>，查找解决方案.</p></li><li><p>中文输入法<br>  <a href="https://wiki.debian.org/I18n/ibus" target="_blank" rel="noopener">ibus</a><br>  <a href="https://wiki.debian.org/gnome-chinese-input" target="_blank" rel="noopener">fcitx</a><br>  参照文档操作即可, 需要注销或者重启电脑.</p></li><li><p>谷歌浏览器书签和tab页标题中文乱码</p><pre><code>sudo apt-get install ttf-wqy-microhei ttf-wqy-zenhei xfonts-wqy</code></pre><p>  安装相应的字体库, 重启chrome.</p></li><li><p>lantern无法启动</p><p>  <a href="https://getlantern.org/" target="_blank" rel="noopener">lantern官网</a>被墙, 打不开.<br>  <a href="https://github.com/getlantern/lantern" target="_blank" rel="noopener">lantern-github</a>, 下载对应版本的lantern, 安装即可.</p><pre><code>/.lantern/bin/lantern： error while loading shared libraries： libappindicator3.so.1： cannot open shared object file： No such file or directory</code></pre><p>  解决方案:</p><pre><code>apt-cache search libappindicator3</code></pre><p>  安装缺失的库:</p><pre><code>apt-get install ibappindicator3-1</code></pre></li></ul><p>至此, Debian基础系统安装完毕, 后期奉上Debian常用软件以及开发环境的配置教程.</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;##安装Debian7.9(wheezy)记录&lt;/p&gt;
+&lt;p&gt;###1. 刻录启动盘&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://cdimage.debian.org/mirror/cdimage/archive/7.9.0/amd64/iso-dvd/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Debian镜像下载&lt;/a&gt;, 直接下载DVD_1.iso即可, 32位系统去相应目录下载.&lt;/li&gt;
+&lt;li&gt;Windows平台下制作启动盘, 可供选择的软件比较多, 推荐2款自己平时常用的.&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.ezbsystems.com/ultraiso/download.htm&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;ultraiso官网&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://www.poweriso.com/download.php&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;poweriso官网&lt;/a&gt;&lt;br&gt;选择对应版本安装即可, 软件具体使用方法百度/谷歌一下.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Linux平台下制作启动盘, 推荐dd命令&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;dd if=/path/to/debian.iso of=/dev/sdb bs=1M    // 替换成你的实际路径
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ul&gt;
+    
+    </summary>
+    
+      <category term="Linux" scheme="http://cls1991.github.io/categories/Linux/"/>
+    
+    
+      <category term="Linux" scheme="http://cls1991.github.io/tags/Linux/"/>
+    
+      <category term="Debian" scheme="http://cls1991.github.io/tags/Debian/"/>
+    
+      <category term="wireless" scheme="http://cls1991.github.io/tags/wireless/"/>
+    
+      <category term="google chrome" scheme="http://cls1991.github.io/tags/google-chrome/"/>
+    
+      <category term="lantern" scheme="http://cls1991.github.io/tags/lantern/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Debian之vim配置篇</title>
+    <link href="http://cls1991.github.io/2016/01/20/Debian%E4%B9%8Bvim%E9%85%8D%E7%BD%AE%E7%AF%87/"/>
+    <id>http://cls1991.github.io/2016/01/20/Debian之vim配置篇/</id>
+    <published>2016-01-20T13:57:07.000Z</published>
+    <updated>2017-11-24T03:18:34.512Z</updated>
+    
+    <content type="html"><![CDATA[<p>##安装vim替换debian自带的vi</p><pre><code>apt-get install vim</code></pre><p>不需要从零开始学习配置vim, 直接用牛人的配置文件, 省得折腾.<br><a href="https://github.com/amix/vimrc" target="_blank" rel="noopener">vimrc</a>, 按照文档操作即可.</p><p>##安装terminator替换字体自带的terminal</p><pre><code>apt-get install terminator</code></pre><p>##配置terminator颜色以及主题<br><a href="https://github.com/ghuntley/terminator-solarized" target="_blank" rel="noopener">terminator-solarized</a><br>美中不足的是, ls显示的文件和目录都是灰蒙蒙的, 这是因为默认情况下solarized各种bright方案基本都是灰色, 而系统默认显示目录和文件时多用bright色.<br><a id="more"></a><br>需要配置dircolors才能显示出彩色的文件和目录.<br><a href="https://github.com/seebi/dircolors-solarized" target="_blank" rel="noopener">dircolors-solarized</a><br>对照文档完成配置.</p><p>##最终效果:<br><img src="https://github.com/cls1991/MyBlog/raw/master/img/terminator.png" alt="terminator"></p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;##安装vim替换debian自带的vi&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;apt-get install vim
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;不需要从零开始学习配置vim, 直接用牛人的配置文件, 省得折腾.&lt;br&gt;&lt;a href=&quot;https://github.com/amix/vimrc&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;vimrc&lt;/a&gt;, 按照文档操作即可.&lt;/p&gt;
+&lt;p&gt;##安装terminator替换字体自带的terminal&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;apt-get install terminator
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;##配置terminator颜色以及主题&lt;br&gt;&lt;a href=&quot;https://github.com/ghuntley/terminator-solarized&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;terminator-solarized&lt;/a&gt;&lt;br&gt;美中不足的是, ls显示的文件和目录都是灰蒙蒙的, 这是因为默认情况下solarized各种bright方案基本都是灰色, 而系统默认显示目录和文件时多用bright色.&lt;br&gt;
+    
+    </summary>
+    
+      <category term="Linux" scheme="http://cls1991.github.io/categories/Linux/"/>
+    
+    
+      <category term="Linux" scheme="http://cls1991.github.io/tags/Linux/"/>
+    
+      <category term="Debian" scheme="http://cls1991.github.io/tags/Debian/"/>
+    
+      <category term="vim" scheme="http://cls1991.github.io/tags/vim/"/>
+    
+      <category term="terminator" scheme="http://cls1991.github.io/tags/terminator/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>pip修改官方源为豆瓣源</title>
+    <link href="http://cls1991.github.io/2015/11/29/pip%E4%BF%AE%E6%94%B9%E5%AE%98%E6%96%B9%E6%BA%90%E4%B8%BA%E8%B1%86%E7%93%A3%E6%BA%90/"/>
+    <id>http://cls1991.github.io/2015/11/29/pip修改官方源为豆瓣源/</id>
+    <published>2015-11-29T12:14:45.000Z</published>
+    <updated>2017-11-24T03:18:34.512Z</updated>
+    
+    <content type="html"><![CDATA[<p>使用pip安装python依赖库, 经常网速很慢, 甚至被墙, 无法完成安装. 好在国内有较为成熟的pip镜像站, 这里选择豆瓣源.</p><p>编辑配置文件, 如果没有, 新建一份:</p><pre><code>vi ~/.pip/pip.conf</code></pre><a id="more"></a><p>添加内容如下:</p><pre><code>[global]index-url = http://pypi.douban.com/simpletrusted-host = pypi.douban.com</code></pre><p>另外, 使用setup.py安装依赖库, 还是会从默认的<a href="http://pypi.python.org下载" target="_blank" rel="noopener">http://pypi.python.org下载</a>, 解决方案如下:</p><p>编辑配置文件, 如果没有, 新建一份:</p><pre><code>vi ~/.pydistutils.cfg</code></pre><p> 添加内容如下:</p><pre><code> [easy_install]index_url = http://pypi.douban.com/simpletrusted-host = pypi.douban.com</code></pre><p>之后便可以安装需要的依赖库了.</p><p>ps: 下面是国内几个常见的pip源, 大家根据自己的地理位置, 选择对应的源.</p><pre><code>http://pypi.hustunique.com/ 华中理工大学http://pypi.sdutlinux.org/ 山东理工大学http://pypi.mirrors.ustc.edu.cn/ 中国科学技术大学</code></pre>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;使用pip安装python依赖库, 经常网速很慢, 甚至被墙, 无法完成安装. 好在国内有较为成熟的pip镜像站, 这里选择豆瓣源.&lt;/p&gt;
+&lt;p&gt;编辑配置文件, 如果没有, 新建一份:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;vi ~/.pip/pip.conf
+&lt;/code&gt;&lt;/pre&gt;
+    
+    </summary>
+    
+    
+      <category term="pip" scheme="http://cls1991.github.io/tags/pip/"/>
+    
+      <category term="python" scheme="http://cls1991.github.io/tags/python/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>hexo配合github pages搭建个人博客</title>
+    <link href="http://cls1991.github.io/2015/11/28/hexo%E9%85%8D%E5%90%88github-pages%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/"/>
+    <id>http://cls1991.github.io/2015/11/28/hexo配合github-pages搭建个人博客/</id>
+    <published>2015-11-28T07:53:50.000Z</published>
+    <updated>2017-11-24T03:18:34.512Z</updated>
+    
+    <content type="html"><![CDATA[<p>1.安装hexo</p><pre><code>npm install hexo-cli -gnpm install hexo --save</code></pre><a id="more"></a><p>2.hexo初始化配置<br>新建hexo目录, 执行：</p><pre><code>hexo init</code></pre><p>新建完成后, 文件目录如下:</p><pre><code>.├── _config.yml├── package.json├── scaffolds├── scripts├── source|      ├── _drafts|      └── _posts└── themes</code></pre><p>3.安装hexo插件</p><pre><code>npm install hexo-generator-index --savenpm install hexo-generator-archive --savenpm install hexo-generator-category --savenpm install hexo-generator-tag --savenpm install hexo-server --savenpm install hexo-deployer-git --savenpm install hexo-deployer-heroku --savenpm install hexo-deployer-rsync --savenpm install hexo-deployer-openshift --savenpm install hexo-renderer-marked@0.2 --savenpm install hexo-renderer-stylus@0.2 --savenpm install hexo-generator-feed@1 --savenpm install hexo-generator-sitemap@1 --save</code></pre><p>运行hexo服务</p><pre><code>hexo server            // 或者hexo s</code></pre><p>出现下列异常:</p><pre><code>&lt;%- partial(&apos;_partial/head&apos;) %&gt;&lt;%- partial(&apos;_partial/header&apos;, null, {cache: !config.relative_link}) %&gt;&lt;%- body %&gt;&lt;% if (theme.sidebar &amp;&amp; theme.sidebar !== &apos;bottom&apos;){ %&gt; &lt;%-     partial(&apos;_partial/sidebar&apos;, null, {cache: !config.relative_link}) %&gt; &lt;% } %&gt;&lt;%- partial(&apos;_partial/footer&apos;, null, {cache: !config.relative_link}) %&gt;&lt;%- partial(&apos;_partial/mobile-nav&apos;, null, {cache: !config.relative_link}) %&gt; &lt;%-     partial(&apos;_partial/after-footer&apos;) %&gt;</code></pre><p>主要原因是: EJS, Stylus, Marked 组件均被移除, 重新安装以下即可.</p><p>解决方案如下:</p><pre><code>npm install hexo-renderer-ejs --savenpm install hexo-renderer-stylus --savenpm install hexo-renderer-marked --save</code></pre><p>可能会出现以下错误(补充: 2016-11-08 15:35:19):</p><pre><code>Waiting...Fatal error: watch ENOSPC</code></pre><p>更新一下组件即可.</p><pre><code>npm dedupe</code></pre><p>再运行hexo服务,</p><pre><code>hexo s</code></pre><p>默认监听端口为4000, 打开浏览器(<a href="http://0.0.0.0:4000" target="_blank" rel="noopener">http://0.0.0.0:4000</a>), 查看效果.</p><p><img src="https://github.com/cls1991/MyBlog/raw/master/img/hexo_blog.png" alt="hexo_blog.png"></p><p>4.hexo简写命令</p><pre><code>hexo n      # hexo new: 生成文章hexo s     # hexo server: 本地发布预览效果hexo g     # hexo generate: 生成public静态文件hexo d    # hexo deploy: 部署到github</code></pre>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;1.安装hexo&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;npm install hexo-cli -g
+npm install hexo --save
+&lt;/code&gt;&lt;/pre&gt;
+    
+    </summary>
+    
+    
+      <category term="hexo" scheme="http://cls1991.github.io/tags/hexo/"/>
+    
+      <category term="github pages" scheme="http://cls1991.github.io/tags/github-pages/"/>
+    
+      <category term="blog" scheme="http://cls1991.github.io/tags/blog/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>nginx学习教程之一--安装nginx以及配置文件详解</title>
+    <link href="http://cls1991.github.io/2015/11/27/nginx%E5%AD%A6%E4%B9%A0%E6%95%99%E7%A8%8B%E4%B9%8B%E4%B8%80-%E5%AE%89%E8%A3%85nginx%E4%BB%A5%E5%8F%8A%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E8%AF%A6%E8%A7%A3/"/>
+    <id>http://cls1991.github.io/2015/11/27/nginx学习教程之一-安装nginx以及配置文件详解/</id>
+    <published>2015-11-27T15:29:15.000Z</published>
+    <updated>2017-11-24T03:18:34.512Z</updated>
+    
+    <summary type="html">
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>proxychains为python脚本穿越GW</title>
+    <link href="http://cls1991.github.io/2015/11/26/proxychains%E4%B8%BApython%E8%84%9A%E6%9C%AC%E7%A9%BF%E8%B6%8AGW/"/>
+    <id>http://cls1991.github.io/2015/11/26/proxychains为python脚本穿越GW/</id>
+    <published>2015-11-26T07:26:34.000Z</published>
+    <updated>2017-11-24T03:18:34.512Z</updated>
+    
+    <content type="html"><![CDATA[<p>安装环境:</p><ul><li>ubuntu 14.10</li><li>python 2.7.6</li></ul><hr><p>经常执行python脚本, 碍于防火墙GW, 很多请求都被屏蔽了, 因此, 需要像proxychains这样的神器, 帮助我们透过GW, 获取我们想要的资源.<br><a id="more"></a></p><p>1.安装shadowsocks<br>这里只介绍shadowsocks在ubuntu上的配置, 至于vps或vpn的搭建, 大家可以移步<a href="https://bandwagonhost.com/" target="_blank" rel="noopener">版瓦工</a>, 套餐自己选择. </p><pre><code>sudo apt-get install shadowsocks     # 安装shadowsocks</code></pre><p>修改shadowsocks配置文件:</p><pre><code>sudo vim /etc/shadowsocks/config.json</code></pre><p>编辑配置文件, 类似如下形式:</p><pre><code>{     &quot;server&quot;: &quot;107.182.xxx.xx&quot;,     &quot;server_port&quot;: 12035,     &quot;local_address&quot;: &quot;127.0.0.1&quot;,    &quot;local_port&quot;: 1080,     &quot;password&quot;: &quot;ZmJkYWJlxxx&quot;,     &quot;timeout&quot;: 512,     &quot;method&quot;: &quot;aes-256-cfb&quot;,     &quot;fast_open&quot;: false,     &quot;workers&quot;: 1 }</code></pre><p>其中, server, server_port, local_port, password修改成自己对应的服务器配置即可.</p><p>运行shadowsocks服务:</p><pre><code>sslocal -c /etc/shadowsocks/config.json</code></pre><p>2.安装proxychains<br>ubuntu安装proxychains, 这里直接通过软件源安装</p><pre><code>sudo apt-get install proxychains</code></pre><p>修改proxychains配置文件:</p><pre><code>sudo vim /etc/proxychains.conf</code></pre><p>编辑配置文件, 类似如下形式:</p><pre><code>socks5 127.0.0.1 1080      # 这里1080端口为shadowsocks配置文件中的local_port项</code></pre><p>测试一下, proxychains服务是否可用.</p><pre><code>proxychains curl https://twitter.com/</code></pre><p>proxychains执行python脚本的示例, 请移步<a href="https://github.com/cls1991/DataKit.git" target="_blank" rel="noopener">github demo</a>.</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;安装环境:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;ubuntu 14.10&lt;/li&gt;
+&lt;li&gt;python 2.7.6&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;p&gt;经常执行python脚本, 碍于防火墙GW, 很多请求都被屏蔽了, 因此, 需要像proxychains这样的神器, 帮助我们透过GW, 获取我们想要的资源.&lt;br&gt;
+    
+    </summary>
+    
+    
+      <category term="python" scheme="http://cls1991.github.io/tags/python/"/>
+    
+      <category term="shadowsocks" scheme="http://cls1991.github.io/tags/shadowsocks/"/>
+    
+      <category term="proxychains" scheme="http://cls1991.github.io/tags/proxychains/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>mac osx10.11下pip安装gevent失败</title>
+    <link href="http://cls1991.github.io/2015/11/03/macosx-gevent/"/>
+    <id>http://cls1991.github.io/2015/11/03/macosx-gevent/</id>
+    <published>2015-11-03T07:19:08.000Z</published>
+    <updated>2017-11-24T03:18:34.512Z</updated>
+    
+    <content type="html"><![CDATA[<p>安装环境：</p><ul><li>mac osx EI Capitan</li><li>python 2.7.6</li></ul><p>pip安装gevent过程中, 出现以下错误(错误代码类似):<br><a id="more"></a></p><pre><code>    clang -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -I /opt/local/include -L /opt/local/lib -U__llvm__ -DLIBEV_EMBED=1 -DEV_COMMON= -DEV_CLEANUP_ENABLE=0 -DEV_EMBED_ENABLE=0 -DEV_PERIODIC_ENABLE=0 -Ibuild/temp.macosx-10.11-x86_64-2.7/libev -Ilibev -I/usr/local/include -I/usr/local/opt/openssl/include -I/usr/local/opt/sqlite/include -I/usr/local/Cellar/python/2.7.10_2/Frameworks/Python.framework/Versions/2.7/include/python2.7 -c gevent/gevent.core.c -o build/temp.macosx-10.11-x86_64-2.7/gevent/gevent.core.o  clang: warning: argument unused during compilation: '-L/opt/local/lib'  In file included from gevent/gevent.core.c:249:  In file included from gevent/libev.h:2:  libev/ev.c:483:48: warning: '/*' within block comment [-Wcomment]  /*#define MIN_INTERVAL  0.00000095367431640625 /* 1/2**20, good till 2200 */                                                 ^  libev/ev.c:1029:42: error: '_Noreturn' keyword must precede function declarator    ecb_inline void ecb_unreachable (void) ecb_noreturn;                                           ^<figure class="highlight vhdl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br></pre></td><td class="code"><pre><span class="line">    _Noreturn</span><br><span class="line">  libev/ev.c:<span class="number">832</span>:<span class="number">26</span>: <span class="literal">note</span>: expanded from macro <span class="symbol">'ecb_noreturn</span>'</span><br><span class="line">    #define ecb_noreturn   _Noreturn</span><br><span class="line">                           ^</span><br><span class="line">  libev/ev.c:<span class="number">1625</span>:<span class="number">31</span>: <span class="literal">warning</span>: <span class="symbol">'extern</span>' <span class="keyword">variable</span> has an initializer [-Wextern-initializer]</span><br><span class="line">    EV_API_DECL struct ev_loop *ev_default_loop_ptr = <span class="number">0</span>; <span class="comment">/* needs to be initialised to make it a definition despite extern */</span></span><br><span class="line">                                ^</span><br><span class="line">  libev/ev.c:<span class="number">1796</span>:<span class="number">7</span>: <span class="literal">warning</span>: unused <span class="keyword">variable</span> <span class="symbol">'ocur</span>_' [-Wunused-<span class="keyword">variable</span>]</span><br><span class="line">        array_needsize (ANPENDING, pendings [pri], pendingmax [pri], w_-&amp;gt;pending, EMPTY2);</span><br><span class="line">        ^</span><br><span class="line">  libev/ev.c:<span class="number">1758</span>:<span class="number">22</span>: <span class="literal">note</span>: expanded from macro <span class="symbol">'array_needsize</span>'</span><br><span class="line">        int ecb_unused ocur_ = (cur);                                     \</span><br><span class="line">                       ^</span><br><span class="line">  libev/ev.c:<span class="number">1807</span>:<span class="number">3</span>: <span class="literal">warning</span>: unused <span class="keyword">variable</span> <span class="symbol">'ocur</span>_' [-Wunused-<span class="keyword">variable</span>]</span><br><span class="line">    array_needsize (W, rfeeds, rfeedmax, rfeedcnt + <span class="number">1</span>, EMPTY2);</span><br><span class="line">    ^</span><br><span class="line">  libev/ev.c:<span class="number">1758</span>:<span class="number">22</span>: <span class="literal">note</span>: expanded from macro <span class="symbol">'array_needsize</span>'</span><br><span class="line">        int ecb_unused ocur_ = (cur);                                     \</span><br><span class="line">                       ^</span><br><span class="line">  libev/ev.c:<span class="number">1934</span>:<span class="number">7</span>: <span class="literal">warning</span>: unused <span class="keyword">variable</span> <span class="symbol">'ocur</span>_' [-Wunused-<span class="keyword">variable</span>]</span><br><span class="line">        array_needsize (int, fdchanges, fdchangemax, fdchangecnt, EMPTY2);</span><br><span class="line">        ^</span><br><span class="line">  libev/ev.c:<span class="number">1758</span>:<span class="number">22</span>: <span class="literal">note</span>: expanded from macro <span class="symbol">'array_needsize</span>'</span><br><span class="line">        int ecb_unused ocur_ = (cur);                                     \</span><br><span class="line">                       ^</span><br><span class="line">  <span class="keyword">In</span> <span class="keyword">file</span> included from gevent/gevent.core.c:<span class="number">249</span>:</span><br><span class="line">  <span class="keyword">In</span> <span class="keyword">file</span> included from gevent/libev.h:<span class="number">2</span>:</span><br><span class="line">  <span class="keyword">In</span> <span class="keyword">file</span> included from libev/ev.c:<span class="number">2484</span>:</span><br><span class="line">  libev/ev_kqueue.c:<span class="number">50</span>:<span class="number">3</span>: <span class="literal">warning</span>: unused <span class="keyword">variable</span> <span class="symbol">'ocur</span>_' [-Wunused-<span class="keyword">variable</span>]</span><br><span class="line">    array_needsize (struct kevent, kqueue_changes, kqueue_changemax, kqueue_changecnt, EMPTY2);</span><br><span class="line">    ^</span><br><span class="line">  libev/ev.c:<span class="number">1758</span>:<span class="number">22</span>: <span class="literal">note</span>: expanded from macro <span class="symbol">'array_needsize</span>'</span><br><span class="line">        int ecb_unused ocur_ = (cur);                                     \</span><br><span class="line">                       ^</span><br><span class="line">  <span class="keyword">In</span> <span class="keyword">file</span> included from gevent/gevent.core.c:<span class="number">249</span>:</span><br><span class="line">  <span class="keyword">In</span> <span class="keyword">file</span> included from gevent/libev.h:<span class="number">2</span>:</span><br><span class="line">  <span class="keyword">In</span> <span class="keyword">file</span> included from libev/ev.c:<span class="number">2490</span>:</span><br><span class="line">  libev/ev_poll.c:<span class="number">66</span>:<span class="number">7</span>: <span class="literal">warning</span>: unused <span class="keyword">variable</span> <span class="symbol">'ocur</span>_' [-Wunused-<span class="keyword">variable</span>]</span><br><span class="line">        array_needsize (struct pollfd, polls, pollmax, pollcnt, EMPTY2);</span><br><span class="line">        ^</span><br><span class="line">  libev/ev.c:<span class="number">1758</span>:<span class="number">22</span>: <span class="literal">note</span>: expanded from macro <span class="symbol">'array_needsize</span>'</span><br><span class="line">        int ecb_unused ocur_ = (cur);                                     \</span><br><span class="line">                       ^</span><br><span class="line">  libev/ev.c:<span class="number">3648</span>:<span class="number">34</span>: <span class="literal">warning</span>: '&amp;amp;' within '|' [-Wbitwise-op-parentheses]</span><br><span class="line">    fd_change (EV_A_ fd, w-&amp;gt;events &amp;amp; EV__IOFDSET | EV_ANFD_REIFY);</span><br><span class="line">                         ~~~~~~~~~~^~~~~~~~~~~~~ ~</span><br><span class="line">  libev/ev.c:<span class="number">3648</span>:<span class="number">34</span>: <span class="literal">note</span>: place parentheses around the '&amp;amp;' expression <span class="keyword">to</span> silence this <span class="literal">warning</span></span><br><span class="line">    fd_change (EV_A_ fd, w-&amp;gt;events &amp;amp; EV__IOFDSET | EV_ANFD_REIFY);</span><br><span class="line">                                   ^</span><br><span class="line">                         (                      )</span><br><span class="line">  libev/ev.c:<span class="number">3687</span>:<span class="number">3</span>: <span class="literal">warning</span>: unused <span class="keyword">variable</span> <span class="symbol">'ocur</span>_' [-Wunused-<span class="keyword">variable</span>]</span><br><span class="line">    array_needsize (ANHE, timers, timermax, ev_active (w) + <span class="number">1</span>, EMPTY2);</span><br><span class="line">    ^</span><br><span class="line">  libev/ev.c:<span class="number">1758</span>:<span class="number">22</span>: <span class="literal">note</span>: expanded from macro <span class="symbol">'array_needsize</span>'</span><br><span class="line">        int ecb_unused ocur_ = (cur);                                     \</span><br><span class="line">                       ^</span><br><span class="line">  libev/ev.c:<span class="number">4367</span>:<span class="number">5</span>: <span class="literal">warning</span>: unused <span class="keyword">variable</span> <span class="symbol">'ocur</span>_' [-Wunused-<span class="keyword">variable</span>]</span><br><span class="line">      array_needsize (ev_idle *, idles [ABSPRI (w)], idlemax [ABSPRI (w)], active, EMPTY2);</span><br><span class="line">      ^</span><br><span class="line">  libev/ev.c:<span class="number">1758</span>:<span class="number">22</span>: <span class="literal">note</span>: expanded from macro <span class="symbol">'array_needsize</span>'</span><br><span class="line">        int ecb_unused ocur_ = (cur);                                     \</span><br><span class="line">                       ^</span><br><span class="line">  libev/ev.c:<span class="number">4407</span>:<span class="number">3</span>: <span class="literal">warning</span>: unused <span class="keyword">variable</span> <span class="symbol">'ocur</span>_' [-Wunused-<span class="keyword">variable</span>]</span><br><span class="line">    array_needsize (ev_prepare *, prepares, preparemax, preparecnt, EMPTY2);</span><br><span class="line">    ^</span><br><span class="line">  libev/ev.c:<span class="number">1758</span>:<span class="number">22</span>: <span class="literal">note</span>: expanded from macro <span class="symbol">'array_needsize</span>'</span><br><span class="line">        int ecb_unused ocur_ = (cur);                                     \</span><br><span class="line">                       ^</span><br><span class="line">  libev/ev.c:<span class="number">4445</span>:<span class="number">3</span>: <span class="literal">warning</span>: unused <span class="keyword">variable</span> <span class="symbol">'ocur</span>_' [-Wunused-<span class="keyword">variable</span>]</span><br><span class="line">    array_needsize (ev_check *, checks, checkmax, checkcnt, EMPTY2);</span><br><span class="line">    ^</span><br><span class="line">  libev/ev.c:<span class="number">1758</span>:<span class="number">22</span>: <span class="literal">note</span>: expanded from macro <span class="symbol">'array_needsize</span>'</span><br><span class="line">        int ecb_unused ocur_ = (cur);                                     \</span><br><span class="line">                       ^</span><br><span class="line">  libev/ev.c:<span class="number">4592</span>:<span class="number">3</span>: <span class="literal">warning</span>: unused <span class="keyword">variable</span> <span class="symbol">'ocur</span>_' [-Wunused-<span class="keyword">variable</span>]</span><br><span class="line">    array_needsize (ev_fork *, forks, forkmax, forkcnt, EMPTY2);</span><br><span class="line">    ^</span><br><span class="line">  libev/ev.c:<span class="number">1758</span>:<span class="number">22</span>: <span class="literal">note</span>: expanded from macro <span class="symbol">'array_needsize</span>'</span><br><span class="line">        int ecb_unused ocur_ = (cur);                                     \</span><br><span class="line">                       ^</span><br><span class="line">  libev/ev.c:<span class="number">4675</span>:<span class="number">3</span>: <span class="literal">warning</span>: unused <span class="keyword">variable</span> <span class="symbol">'ocur</span>_' [-Wunused-<span class="keyword">variable</span>]</span><br><span class="line">    array_needsize (ev_async *, asyncs, asyncmax, asynccnt, EMPTY2);</span><br><span class="line">    ^</span><br><span class="line">  libev/ev.c:<span class="number">1758</span>:<span class="number">22</span>: <span class="literal">note</span>: expanded from macro <span class="symbol">'array_needsize</span>'</span><br><span class="line">        int ecb_unused ocur_ = (cur);                                     \</span><br><span class="line">                       ^</span><br><span class="line">  <span class="number">14</span> warnings <span class="keyword">and</span> <span class="number">1</span> <span class="literal">error</span> generated.</span><br><span class="line">  <span class="literal">error</span>: command <span class="symbol">'clang</span>' failed <span class="keyword">with</span> <span class="keyword">exit</span> status <span class="number">1</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">----------------------------------------</span></span><br><span class="line">  Failed building wheel <span class="keyword">for</span> gevent</span><br><span class="line">Failed <span class="keyword">to</span> build gevent</span><br><span class="line">Installing collected packages: gevent</span><br><span class="line">  Running setup.py install <span class="keyword">for</span> gevent</span><br><span class="line">    Complete output from command /usr/local/opt/python/bin/python2.<span class="number">7</span> -c <span class="string">"import setuptools, tokenize;__file__='/private/var/folders/q8/1c24n_wj6kzc6kgl7629pwyh0000gn/T/pip-build-3zCPVx/gevent/setup.py';exec(compile(getattr(tokenize, 'open', open)(__file__).read().replace('\r\n', '\n'), __file__, 'exec'))"</span> install <span class="comment">--record /var/folders/q8/1c24n_wj6kzc6kgl7629pwyh0000gn/T/pip-9VpZCX-record/install-record.txt --single-version-externally-managed --compile:</span></span><br><span class="line">    running install</span><br><span class="line">    running build</span><br><span class="line">    running build_py</span><br><span class="line">    running build_ext</span><br><span class="line">    building <span class="symbol">'gevent</span>.core' extension</span><br><span class="line">    clang -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -I /opt/local/include -L /opt/local/lib -U__llvm__ -DLIBEV_EMBED=<span class="number">1</span> -DEV_COMMON= -DEV_CLEANUP_ENABLE=<span class="number">0</span> -DEV_EMBED_ENABLE=<span class="number">0</span> -DEV_PERIODIC_ENABLE=<span class="number">0</span> -Ibuild/temp.macosx-<span class="number">10.11</span>-x86_64-<span class="number">2.7</span>/libev -Ilibev -I/usr/local/include -I/usr/local/opt/openssl/include -I/usr/local/opt/sqlite/include -I/usr/local/Cellar/python/<span class="number">2.7</span>.<span class="number">10_2</span>/Frameworks/Python.framework/Versions/<span class="number">2.7</span>/include/python2.<span class="number">7</span> -c gevent/gevent.core.c -o build/temp.macosx-<span class="number">10.11</span>-x86_64-<span class="number">2.7</span>/gevent/gevent.core.o</span><br><span class="line">    clang: <span class="literal">warning</span>: argument unused during compilation: '-L/opt/local/lib'</span><br><span class="line">    <span class="keyword">In</span> <span class="keyword">file</span> included from gevent/gevent.core.c:<span class="number">249</span>:</span><br><span class="line">    <span class="keyword">In</span> <span class="keyword">file</span> included from gevent/libev.h:<span class="number">2</span>:</span><br><span class="line">    libev/ev.c:<span class="number">483</span>:<span class="number">48</span>: <span class="literal">warning</span>: '<span class="comment">/*' within block comment [-Wcomment]</span></span><br><span class="line"><span class="comment">    /*#define MIN_INTERVAL  0.00000095367431640625 /* 1/2**20, good till 2200 */</span></span><br><span class="line">                                                   ^</span><br><span class="line">    libev/ev.c:<span class="number">1029</span>:<span class="number">42</span>: <span class="literal">error</span>: '_Noreturn' keyword must precede <span class="keyword">function</span> declarator</span><br><span class="line">      ecb_inline void ecb_unreachable (void) ecb_noreturn;</span><br><span class="line">                                             ^</span><br></pre></td></tr></table></figure>      _Noreturn    libev/ev.c:832:26: note: expanded from macro 'ecb_noreturn'      #define ecb_noreturn   _Noreturn                             ^    libev/ev.c:1625:31: warning: 'extern' variable has an initializer [-Wextern-initializer]      EV_API_DECL struct ev_loop *ev_default_loop_ptr = 0; /* needs to be initialised to make it a definition despite extern */                                  ^    libev/ev.c:1796:7: warning: unused variable 'ocur_' [-Wunused-variable]          array_needsize (ANPENDING, pendings [pri], pendingmax [pri], w_-&gt;pending, EMPTY2);          ^    libev/ev.c:1758:22: note: expanded from macro 'array_needsize'          int ecb_unused ocur_ = (cur);                                     \                         ^    libev/ev.c:1807:3: warning: unused variable 'ocur_' [-Wunused-variable]      array_needsize (W, rfeeds, rfeedmax, rfeedcnt + 1, EMPTY2);      ^    libev/ev.c:1758:22: note: expanded from macro 'array_needsize'          int ecb_unused ocur_ = (cur);                                     \                         ^    libev/ev.c:1934:7: warning: unused variable 'ocur_' [-Wunused-variable]          array_needsize (int, fdchanges, fdchangemax, fdchangecnt, EMPTY2);          ^    libev/ev.c:1758:22: note: expanded from macro 'array_needsize'          int ecb_unused ocur_ = (cur);                                     \                         ^    In file included from gevent/gevent.core.c:249:    In file included from gevent/libev.h:2:    In file included from libev/ev.c:2484:    libev/ev_kqueue.c:50:3: warning: unused variable 'ocur_' [-Wunused-variable]      array_needsize (struct kevent, kqueue_changes, kqueue_changemax, kqueue_changecnt, EMPTY2);      ^    libev/ev.c:1758:22: note: expanded from macro 'array_needsize'          int ecb_unused ocur_ = (cur);                                     \                         ^    In file included from gevent/gevent.core.c:249:    In file included from gevent/libev.h:2:    In file included from libev/ev.c:2490:    libev/ev_poll.c:66:7: warning: unused variable 'ocur_' [-Wunused-variable]          array_needsize (struct pollfd, polls, pollmax, pollcnt, EMPTY2);          ^    libev/ev.c:1758:22: note: expanded from macro 'array_needsize'          int ecb_unused ocur_ = (cur);                                     \                         ^    libev/ev.c:3648:34: warning: '&amp;' within '|' [-Wbitwise-op-parentheses]      fd_change (EV_A_ fd, w-&gt;events &amp; EV__IOFDSET | EV_ANFD_REIFY);                           ~~~~~~~~~~^~~~~~~~~~~~~ ~    libev/ev.c:3648:34: note: place parentheses around the '&amp;' expression to silence this warning      fd_change (EV_A_ fd, w-&gt;events &amp; EV__IOFDSET | EV_ANFD_REIFY);                                     ^                           (                      )    libev/ev.c:3687:3: warning: unused variable 'ocur_' [-Wunused-variable]      array_needsize (ANHE, timers, timermax, ev_active (w) + 1, EMPTY2);      ^    libev/ev.c:1758:22: note: expanded from macro 'array_needsize'          int ecb_unused ocur_ = (cur);                                     \                         ^    libev/ev.c:4367:5: warning: unused variable 'ocur_' [-Wunused-variable]        array_needsize (ev_idle *, idles [ABSPRI (w)], idlemax [ABSPRI (w)], active, EMPTY2);        ^    libev/ev.c:1758:22: note: expanded from macro 'array_needsize'          int ecb_unused ocur_ = (cur);                                     \                         ^    libev/ev.c:4407:3: warning: unused variable 'ocur_' [-Wunused-variable]      array_needsize (ev_prepare *, prepares, preparemax, preparecnt, EMPTY2);      ^    libev/ev.c:1758:22: note: expanded from macro 'array_needsize'          int ecb_unused ocur_ = (cur);                                     \                         ^    libev/ev.c:4445:3: warning: unused variable 'ocur_' [-Wunused-variable]      array_needsize (ev_check *, checks, checkmax, checkcnt, EMPTY2);      ^    libev/ev.c:1758:22: note: expanded from macro 'array_needsize'          int ecb_unused ocur_ = (cur);                                     \                         ^    libev/ev.c:4592:3: warning: unused variable 'ocur_' [-Wunused-variable]      array_needsize (ev_fork *, forks, forkmax, forkcnt, EMPTY2);      ^    libev/ev.c:1758:22: note: expanded from macro 'array_needsize'          int ecb_unused ocur_ = (cur);                                     \                         ^    libev/ev.c:4675:3: warning: unused variable 'ocur_' [-Wunused-variable]      array_needsize (ev_async *, asyncs, asyncmax, asynccnt, EMPTY2);      ^    libev/ev.c:1758:22: note: expanded from macro 'array_needsize'          int ecb_unused ocur_ = (cur);                                     \                         ^    14 warnings and 1 error generated.    error: command 'clang' failed with exit status 1    ----------------------------------------Command "/usr/local/opt/python/bin/python2.7 -c "import setuptools, tokenize;__file__='/private/var/folders/q8/1c24n_wj6kzc6kgl7629pwyh0000gn/T/pip-build-3zCPVx/gevent/setup.py';exec(compile(getattr(tokenize, 'open', open)(__file__).read().replace('\r\n', '\n'), __file__, 'exec'))" install --record /var/folders/q8/1c24n_wj6kzc6kgl7629pwyh0000gn/T/pip-9VpZCX-record/install-record.txt --single-version-externally-managed --compile" failed with error code 1 in /private/var/folders/q8/1c24n_wj6kzc6kgl7629pwyh0000gn/T/pip-build-3zCPVx/gevent</code></pre><p>系统升级前，这样安装是没问题的, 升级后就悲剧了.<br>通过强大的stackoverflow，几番查询后，问题终于解决了，记录一下做备用。</p><p>解决方案如下:</p><pre><code>CFLAGS=&apos;-std=c99&apos; pip install gevent</code></pre><p>主要原因是, osx10.11系统中, clang默认采用c11取代了之前的c99; 在这里, 我们临时退回c99即可.</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;安装环境：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;mac osx EI Capitan&lt;/li&gt;
+&lt;li&gt;python 2.7.6&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;pip安装gevent过程中, 出现以下错误(错误代码类似):&lt;br&gt;
+    
+    </summary>
+    
+    
+      <category term="mac osx EI Capitan" scheme="http://cls1991.github.io/tags/mac-osx-EI-Capitan/"/>
+    
+      <category term="pip" scheme="http://cls1991.github.io/tags/pip/"/>
+    
+      <category term="gevent" scheme="http://cls1991.github.io/tags/gevent/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>ssh连接异常断开, Linux后台程序结束退出</title>
+    <link href="http://cls1991.github.io/2015/11/02/ssh-problem/"/>
+    <id>http://cls1991.github.io/2015/11/02/ssh-problem/</id>
+    <published>2015-11-02T10:44:07.000Z</published>
+    <updated>2017-11-24T03:18:34.512Z</updated>
+    
+    <content type="html"><![CDATA[<p>打开终端, 通过ssh连接到Linux主机进行开发, 正常退出ssh后, Linux主机上的后台程序仍然会继续执行下去; 如果此时直接关闭终端或者遇到断电等异常情形, ssh退出了, 对应Linux主机上的后台服务也会退出, 解决方案可以是: 使用nohup命令屏蔽掉所有的挂断信号, 这样后台程序会一直执行, 不会被打断.</p><pre><code>测试用例: ping www.baidu.com</code></pre><a id="more"></a><p>测试结果截图展示:<br><img src="https://github.com/cls1991/MyBlog/raw/master/img/ssh_problem_01.png" alt="ssh_problem_01"><br><img src="https://github.com/cls1991/MyBlog/raw/master/img/ssh_problem_02.png" alt="ssh_problem_02"><br><img src="https://github.com/cls1991/MyBlog/raw/master/img/ssh_problem_03.png" alt="ssh_p:roblem_03"></p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;打开终端, 通过ssh连接到Linux主机进行开发, 正常退出ssh后, Linux主机上的后台程序仍然会继续执行下去; 如果此时直接关闭终端或者遇到断电等异常情形, ssh退出了, 对应Linux主机上的后台服务也会退出, 解决方案可以是: 使用nohup命令屏蔽掉所有的挂断信号, 这样后台程序会一直执行, 不会被打断.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;测试用例: ping www.baidu.com
+&lt;/code&gt;&lt;/pre&gt;
+    
+    </summary>
+    
+      <category term="Linux" scheme="http://cls1991.github.io/categories/Linux/"/>
+    
+    
+      <category term="Linux" scheme="http://cls1991.github.io/tags/Linux/"/>
+    
+      <category term="运维" scheme="http://cls1991.github.io/tags/%E8%BF%90%E7%BB%B4/"/>
+    
+      <category term="ssh" scheme="http://cls1991.github.io/tags/ssh/"/>
+    
+  </entry>
+  
+</feed>

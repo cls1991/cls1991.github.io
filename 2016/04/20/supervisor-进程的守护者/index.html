@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>supervisor--进程的守护者 | cls1991的个人博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="##为什么推荐supervisor接触过后台开发的人, 应该对以下内容不陌生.比如, 你开发了一个服务, 放在服务器上运行, 供客户端调用. 你会这样做, 以python程序为例说明: pyenv activate env_AntiCheat_2.7.9                                /">
+<meta name="keywords" content="python,supervisor,process">
+<meta property="og:type" content="article">
+<meta property="og:title" content="supervisor--进程的守护者">
+<meta property="og:url" content="http://cls1991.github.io/2016/04/20/supervisor-进程的守护者/index.html">
+<meta property="og:site_name" content="cls1991的个人博客">
+<meta property="og:description" content="##为什么推荐supervisor接触过后台开发的人, 应该对以下内容不陌生.比如, 你开发了一个服务, 放在服务器上运行, 供客户端调用. 你会这样做, 以python程序为例说明: pyenv activate env_AntiCheat_2.7.9                                // 激活python虚拟环境 nohup python AntiCheat.py">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-11-24T03:18:34.512Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="supervisor--进程的守护者">
+<meta name="twitter:description" content="##为什么推荐supervisor接触过后台开发的人, 应该对以下内容不陌生.比如, 你开发了一个服务, 放在服务器上运行, 供客户端调用. 你会这样做, 以python程序为例说明: pyenv activate env_AntiCheat_2.7.9                                // 激活python虚拟环境 nohup python AntiCheat.py">
+  
+    <link rel="alternative" href="/atom.xml" title="cls1991的个人博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">cls1991的个人博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">逼一逼自己, 看会有什么不同</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://cls1991.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-supervisor-进程的守护者" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/04/20/supervisor-进程的守护者/" class="article-date">
+  <time datetime="2016-04-20T05:53:34.000Z" itemprop="datePublished">2016-04-20</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Linux/">Linux</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      supervisor--进程的守护者
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>##为什么推荐supervisor<br>接触过后台开发的人, 应该对以下内容不陌生.<br>比如, 你开发了一个服务, 放在服务器上运行, 供客户端调用. 你会这样做, 以python程序为例说明:</p>
+<pre><code>pyenv activate env_AntiCheat_2.7.9                                // 激活python虚拟环境
+nohup python AntiCheat.py &gt; AntiCheat.log 2&gt;&amp;1 &amp;                 // 以后台形式运行服务
+</code></pre><p>如果代码有更新, 需要重新部署服务, 不得不找到进程id, 杀死.</p>
+<pre><code>ps aux | grep AntiCheat.py                     // 找出进程id
+kill -9 xxx                                   // 杀死进程
+</code></pre><p>每次都重复着这样的操作, 实在是浪费时间, 当然你也可以针对每一个程序写一份脚本, 一旦服务数量很多, 重复性的劳动就会越来越多. 这时候就需要有一个程序能够统一管理目标服务.<br><a id="more"></a></p>
+<h2 id="安装supervisor"><a href="#安装supervisor" class="headerlink" title="安装supervisor"></a>安装supervisor</h2><pre><code>pip install supervisor
+</code></pre><p>手动编译安装亦可, 根据自己的需要选择一种安装途径.</p>
+<h2 id="配置supervisor"><a href="#配置supervisor" class="headerlink" title="配置supervisor"></a>配置supervisor</h2><p>官方提供的样例配置<a href="https://github.com/Supervisor/supervisor/blob/master/supervisor/skel/sample.conf" target="_blank" rel="noopener">sample.conf</a><br>我们只需要在其基础上进行修改即可使用.</p>
+<pre><code>; Sample supervisor config file.
+;
+; For more information on the config file, please see:
+; http://supervisord.org/configuration.html
+;
+; Notes:
+;  - Shell expansion (&quot;~&quot; or &quot;$HOME&quot;) is not supported.  Environment
+;    variables can be expanded using this syntax: &quot;%(ENV_HOME)s&quot;.
+;  - Comments must have a leading space: &quot;a=b ;comment&quot; not &quot;a=b;comment&quot;.
+;  - Quotes around values are not supported, except in the case of
+;    the environment= options as shown below.
+
+[unix_http_server]
+file=/tmp/supervisor.sock   ; (the path to the socket file)
+;chmod=0700                 ; socket file mode (default 0700)
+;chown=nobody:nogroup       ; socket file uid:gid owner
+;username=user              ; (default is no username (open server))
+;password=123               ; (default is no password (open server))
+
+;[inet_http_server]         ; inet (TCP) server disabled by default
+;port=127.0.0.1:9001        ; (ip_address:port specifier, *:port for all iface)
+username=cls1991              ; (default is no username (open server))
+password=asd123               ; (default is no password (open server))
+
+[supervisord]
+logfile=/tmp/supervisord.log ; (main log file;default $CWD/supervisord.log)
+logfile_maxbytes=50MB        ; (max main logfile bytes b4 rotation;default 50MB)
+logfile_backups=10           ; (num of main logfile rotation backups;default 10)
+loglevel=info                ; (log level;default info; others: debug,warn,trace)
+pidfile=/tmp/supervisord.pid ; (supervisord pidfile;default supervisord.pid)
+nodaemon=false               ; (start in foreground if true;default false)
+minfds=1024                  ; (min. avail startup file descriptors;default 1024)
+minprocs=200                 ; (min. avail process descriptors;default 200)
+;umask=022                   ; (process file creation umask;default 022)
+;user=chrism                 ; (default is current user, required if root)
+;identifier=supervisor       ; (supervisord identifier, default is &apos;supervisor&apos;)
+;directory=/tmp              ; (default is not to cd during start)
+;nocleanup=true              ; (don&apos;t clean up tempfiles at start;default false)
+;childlogdir=/tmp            ; (&apos;AUTO&apos; child log dir, default $TEMP)
+;environment=KEY=&quot;value&quot;     ; (key value pairs to add to environment)
+;strip_ansi=false            ; (strip ansi escape codes in logs; def. false)
+
+; the below section must remain in the config file for RPC
+; (supervisorctl/web interface) to work, additional interfaces may be
+; added by defining them in separate rpcinterface: sections
+[rpcinterface:supervisor]
+supervisor.rpcinterface_factory = supervisor.rpcinterface:make_main_rpcinterface
+
+[supervisorctl]
+serverurl=unix:///tmp/supervisor.sock ; use a unix:// URL  for a unix socket
+;serverurl=http://127.0.0.1:9001 ; use an http:// url to specify an inet socket
+;username=chris              ; should be same as http_username if set
+;password=123                ; should be same as http_password if set
+;prompt=mysupervisor         ; cmd line prompt (default &quot;supervisor&quot;)
+;history_file=~/.sc_history  ; use readline history if available
+
+; The below sample program section shows all possible program subsection values,
+; create one or more &apos;real&apos; program: sections to be able to control them under
+; supervisor.
+
+;[program:AntiCheat]
+;command=python AntiCheat.py              ; the program (relative uses PATH, can take args)
+;process_name=%(program_name)s ; process_name expr (default %(program_name)s)
+;numprocs=1                    ; number of processes copies to start (def 1)
+directory=/home/taozhengkai/Developer/mygit/github/ThirdPlatform                ; directory to cwd to before exec (def no cwd)
+;umask=022                     ; umask for process (default None)
+;priority=999                  ; the relative start priority (default 999)
+;autostart=true                ; start at supervisord start (default: true)
+;startsecs=1                   ; # of secs prog must stay up to be running (def. 1)
+;startretries=3                ; max # of serial start failures when starting (default 3)
+;autorestart=unexpected        ; when to restart if exited after running (def: unexpected)
+;exitcodes=0,2                 ; &apos;expected&apos; exit codes used with autorestart (default 0,2)
+;stopsignal=QUIT               ; signal used to kill process (default TERM)
+;stopwaitsecs=10               ; max num secs to wait b4 SIGKILL (default 10)
+;stopasgroup=false             ; send stop signal to the UNIX process group (default false)
+;killasgroup=false             ; SIGKILL the UNIX process group (def false)
+;user=chrism                   ; setuid to this UNIX account to run the program
+;redirect_stderr=true          ; redirect proc stderr to stdout (default false)
+;stdout_logfile=/a/path        ; stdout log path, NONE for none; default AUTO
+;stdout_logfile_maxbytes=1MB   ; max # logfile bytes b4 rotation (default 50MB)
+;stdout_logfile_backups=10     ; # of stdout logfile backups (default 10)
+;stdout_capture_maxbytes=1MB   ; number of bytes in &apos;capturemode&apos; (default 0)
+;stdout_events_enabled=false   ; emit events on stdout writes (default false)
+;stderr_logfile=/a/path        ; stderr log path, NONE for none; default AUTO
+;stderr_logfile_maxbytes=1MB   ; max # logfile bytes b4 rotation (default 50MB)
+;stderr_logfile_backups=10     ; # of stderr logfile backups (default 10)
+;stderr_capture_maxbytes=1MB   ; number of bytes in &apos;capturemode&apos; (default 0)
+;stderr_events_enabled=false   ; emit events on stderr writes (default false)
+environment=PATH=&quot;/home/taozhengkai/.pyenv/versions/env_AntiCheat_2.7.9/bin&quot;       ; process environment additions (def no adds)
+;serverurl=AUTO                ; override serverurl computation (childutils)
+
+; The below sample eventlistener section shows all possible
+; eventlistener subsection values, create one or more &apos;real&apos;
+; eventlistener: sections to be able to handle event notifications
+; sent by supervisor.
+
+; The below sample group section shows all possible group values,
+; create one or more &apos;real&apos; group: sections to create &quot;heterogeneous&quot;
+; process groups.
+
+;[group:thegroupname]
+programs=AntiCheat  ; each refers to &apos;x&apos; in [program:x] definitions
+;priority=999                  ; the relative start priority (default 999)
+
+; The [include] section can just contain the &quot;files&quot; setting.  This
+; setting can list multiple files (separated by whitespace or
+; newlines).  It can also contain wildcards.  The filenames are
+; interpreted as relative to this file.  Included files *cannot*
+; include files themselves.
+
+;[include]
+;files = relative/directory/*.ini
+</code></pre><p>配置完毕之后, 启动supervisor服务</p>
+<pre><code>supervisord -c supervisord.conf                     // 从指定的配置文件启动supervisor
+</code></pre><p>如果配置了web管理接口, 直接访问<a href="http://127.0.0.1:9001(默认配置" target="_blank" rel="noopener">http://127.0.0.1:9001(默认配置</a>), 用户名和密码默认或者自定义都行:</p>
+<pre><code>[inet_http_server]         ; inet (TCP) server disabled by default
+port=127.0.0.1:9001        ; (ip_address:port specifier, *:port for all iface)
+username=cls1991              ; (default is no username (open server))
+password=asd123               ; (default is no password (open server))
+</code></pre><p>代码更新之后, 可以利用web管理页面重新部署进程, 便利不少. 想更深入了解supervisor, 请访问<a href="http://supervisord.org/" target="_blank" rel="noopener">supervisor官网</a>.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a class="article-read-link">
+          <span id="busuanzi_container_page_pv">
+                <span id="busuanzi_value_page_pv"></span>&nbsp;Reads
+          </span>
+      </a>
+      <!-- 暂时关闭分享功能 -->
+      <a data-url="http://cls1991.github.io/2016/04/20/supervisor-进程的守护者/" data-id="cjaddfyhg000kwgt7vuntl91a" class="article-share-link">Share</a>
+      
+        <a href="http://cls1991.github.io/2016/04/20/supervisor-进程的守护者/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/process/">process</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/">python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/supervisor/">supervisor</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/07/16/svn-git数据仓库无损迁移/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          svn/git数据仓库无损迁移
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/01/20/Debian之oracle jdk配置篇/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Debian之oracle jdk配置篇</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<section id="comments">
+  <!-- disqus评论框 start -->
+  
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    </div>
+  
+  <!-- disqus公共JS代码 end -->
+
+  
+  <!-- 多说评论框 start -->
+  <div class="ds-thread"></div>
+  <!-- 多说评论框 end -->
+  <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name: "iflyfish"};
+    (function () {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';
+      ds.async = true;
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+  <!-- 多说公共JS代码 end -->
+  
+
+</section>
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/golang/">golang</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Debian/">Debian</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/centos/">centos</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/commit-log/">commit log</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gevent/">gevent</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github-pages/">github pages</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gitlab/">gitlab</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/golang-org/">golang.org</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/google-chrome/">google chrome</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jdk/">jdk</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lantern/">lantern</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mac-osx-EI-Capitan/">mac osx EI Capitan</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql-server/">mysql server</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pip/">pip</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/polipo/">polipo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/process/">process</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/proxychains/">proxychains</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/">redis</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis-server/">redis server</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shadowsocks/">shadowsocks</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/socks5-proxy/">socks5 proxy</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/source/">source</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ssh/">ssh</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/supervisor/">supervisor</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/svn/">svn</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/terminator/">terminator</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vim/">vim</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/wireless/">wireless</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/提交记录/">提交记录</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据仓库/">数据仓库</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/无损迁移/">无损迁移</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/运维/">运维</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Debian/" style="font-size: 16.67px;">Debian</a> <a href="/tags/Linux/" style="font-size: 20px;">Linux</a> <a href="/tags/blog/" style="font-size: 10px;">blog</a> <a href="/tags/centos/" style="font-size: 10px;">centos</a> <a href="/tags/commit-log/" style="font-size: 10px;">commit log</a> <a href="/tags/gevent/" style="font-size: 10px;">gevent</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/github-pages/" style="font-size: 10px;">github pages</a> <a href="/tags/gitlab/" style="font-size: 10px;">gitlab</a> <a href="/tags/golang-org/" style="font-size: 10px;">golang.org</a> <a href="/tags/google-chrome/" style="font-size: 10px;">google chrome</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/jdk/" style="font-size: 10px;">jdk</a> <a href="/tags/lantern/" style="font-size: 10px;">lantern</a> <a href="/tags/mac-osx-EI-Capitan/" style="font-size: 10px;">mac osx EI Capitan</a> <a href="/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/tags/mysql-server/" style="font-size: 10px;">mysql server</a> <a href="/tags/pip/" style="font-size: 13.33px;">pip</a> <a href="/tags/polipo/" style="font-size: 10px;">polipo</a> <a href="/tags/process/" style="font-size: 10px;">process</a> <a href="/tags/proxychains/" style="font-size: 10px;">proxychains</a> <a href="/tags/python/" style="font-size: 16.67px;">python</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/redis-server/" style="font-size: 10px;">redis server</a> <a href="/tags/shadowsocks/" style="font-size: 10px;">shadowsocks</a> <a href="/tags/socks5-proxy/" style="font-size: 10px;">socks5 proxy</a> <a href="/tags/source/" style="font-size: 10px;">source</a> <a href="/tags/ssh/" style="font-size: 10px;">ssh</a> <a href="/tags/supervisor/" style="font-size: 10px;">supervisor</a> <a href="/tags/svn/" style="font-size: 10px;">svn</a> <a href="/tags/terminator/" style="font-size: 10px;">terminator</a> <a href="/tags/vim/" style="font-size: 10px;">vim</a> <a href="/tags/wireless/" style="font-size: 10px;">wireless</a> <a href="/tags/提交记录/" style="font-size: 10px;">提交记录</a> <a href="/tags/数据仓库/" style="font-size: 10px;">数据仓库</a> <a href="/tags/无损迁移/" style="font-size: 10px;">无损迁移</a> <a href="/tags/运维/" style="font-size: 10px;">运维</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">十一月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">一月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">十一月 2015</a><span class="archive-list-count">6</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/11/24/获取golang-org安装包/">获取golang.org安装包</a>
+          </li>
+        
+          <li>
+            <a href="/2016/11/08/centos-install-mysql-redis-from-source/">centos源码安装mysql, redis</a>
+          </li>
+        
+          <li>
+            <a href="/2016/07/16/svn-git数据仓库无损迁移/">svn/git数据仓库无损迁移</a>
+          </li>
+        
+          <li>
+            <a href="/2016/04/20/supervisor-进程的守护者/">supervisor--进程的守护者</a>
+          </li>
+        
+          <li>
+            <a href="/2016/01/20/Debian之oracle jdk配置篇/">Debian之oracle jdk配置篇</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+    
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2017 cls1991<br>
+            Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+
+            <!-- 不蒜子计数 Start -->
+            <br>
+            <span style="display: inline;" id="busuanzi_container_site_uv">本站总访客数 <span id="busuanzi_value_site_uv" font="微软雅黑" style="color:white"></span> 次</span>
+            <br>
+            <span style="display: inline;" id="busuanzi_container_site_pv">本站总访问量 <span id="busuanzi_value_site_pv" font="微软雅黑" style="color:white"></span> 次</span> 
+            <!-- 不蒜子计数 End -->
+        </div>
+    </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'cls1991';
+  
+  var disqus_url = 'http://cls1991.github.io/2016/04/20/supervisor-进程的守护者/';
+  
+  (function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-69637312-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+  </div>
+</body>
+</html>
